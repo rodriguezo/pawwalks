@@ -1,6 +1,12 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { lazy, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
+
+const TanStackRouterDevtools = import.meta.env.DEV
+  ? lazy(() =>
+      import('@tanstack/router-devtools').then((mod) => ({ default: mod.TanStackRouterDevtools }))
+    )
+  : () => null
 import { PawPrint } from 'lucide-react'
 import '~/styles.css'
 
@@ -32,7 +38,9 @@ function RootLayout() {
         </div>
       </nav>
       <Outlet />
-      <TanStackRouterDevtools />
+      <Suspense>
+        <TanStackRouterDevtools />
+      </Suspense>
     </>
   )
 }
